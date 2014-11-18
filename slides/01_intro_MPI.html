@@ -1,0 +1,382 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!--
+  Slides for the first laboratory session of the Operating Systems course
+  University of Lleida | 2014-2015
+
+  Author: Jordi Vilaplana <gatasuna@gmail.com>
+
+  URL:
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <span><img src="images/eps.png"></span>
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/udl.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+    </hgroup>
+    <article class="smaller">
+      <h2>Session 1</h2>
+      <h3>Introduction to MPI</h3>
+      <div class="centered">
+        <p><a target="_self" href="01_intro_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="01_intro_MPI.html">Next session</a></p>
+        <p>&nbsp;</p>
+        <img src="images/MPI01/cluster.jpg" title="schema" alt="Schema" style="width:50%" />
+      </div>
+      <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
+    </article>
+  </slide>
+
+  <slide>
+	<hgroup>
+		<h2>Introduction</h2>
+	</hgroup>
+	<article>
+		<ul>
+			<li> A disributed system is composed by different computing nodes</li>
+			<li> Each computing node has its own memory to store data</li>
+			<li> The nodes comunicates among them by messages</li>
+		</ul>
+		<div class="centered" style="margin-top:2em">
+        		<img src="images/MPI01/SingleNode.png" alt="Message" title="Message" style="width: 50%;">
+      		</div>		
+	</article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introduction</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>MPI stands for Message Passing Interface</li>
+        <li>Standard Protocol to comunicate distributed processes</li>
+        <li>Developed in 1993 based on the Message Passing Paradigm</li>
+      </ul>
+      <div class="centered" style="margin-top:2em">
+        <img src="images/MPI01/mesasge-pasing.png" alt="Message" title="Message" style="width: 30%;">
+      </div>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introduction</h2>
+    </hgroup>
+    <article>
+      <ul class="build">
+	<li> <ul>
+        	<li>Programing Languages: <b>C</b>, C++, Fortran.</li>
+        	<li>Different implementations: MPICH2, LAM/MPI, OpenMPI</li>
+        	<li>The MPI API contains different functions to comunicate and synchronize the different tasks</li>
+		<li> Very scalable through processors</li>
+      	</ul></li>
+	</li>
+	<pre class="prettyprint" data-lang="C" >
+        #include "mip.h"
+        
+        int main(int argc, char **argv) {
+	  /*No MPI functions called before this*/
+          MPI_Init(&argc,&argv);
+	  /* MPI code here */
+	  MPI_Finalize();
+	  /*No MPI functions called after this*/
+        }</pre>
+	</li>
+    </ul>
+    </article>
+  </slide>
+ 
+  <slide>
+    <hgroup>
+      <h2>Using MPI</h2>
+    </hgroup>
+    <article>
+      <ul class="build">
+	<li><ul>
+        	<li>Install the MPI libraries</li>
+		<li><pre class="prettyprint" data-lang="terminal">
+		sudo apt-get install libcr-dev mpich2 mpich2-doc	
+		</pre></li>
+	</ul></li>
+	<li><ul>
+		<li> Compile</li>
+		<li><pre class="prettyprint" data-lang="terminal">
+	 	mpicc program.c -o program
+		</pre></li>
+	</ul></li>
+	<li><ul>
+		<li> Execute</li>
+		<li><pre class="prettyprint" data-lang="terminal">
+	 	mpirun -np &lt;Number of processors&gt; ./hello
+		</pre></li>
+	</ul></li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>MPI Functions</h2>
+    </hgroup>
+    <article>
+      <ul class="build">
+	<li><ul>
+		<li><pre class="prettyprint" data-lang="C"> #include "mpi.h"</pre></li>
+		<li> Contains the definitions, macros and function prototypes of MPI.</li>
+	</ul></li>
+	<li><ul>
+		<li><pre class="prettyprint" data-lang="C"> int MPI_Comm_rank(<font color="red">MPI_Comm communicator</font>, int* rank) </pre></li>
+		<li> Returns a different non-negative ID to each processor</li>
+	 	<li> <font color="red">Communicator:</font> collection of processes that can send messages to each other. For basic programms use <font color="red">MPI_COMM_WORLD</font>.</li>
+	</ul></li>
+	<li><ul>
+		<li><pre class="prettyprint" data-lang="C">int MPI_Comm_size(<font color="red">MPI_Comm communicator</font>, int* size) </pre>  </li>
+		<li> The total number of processors in this execution</li>
+	</ul></li>
+
+	<li><ul>
+		<li><pre class="prettyprint" data-lang="C">int MPI_Get_processor_name(char* host, int* namelen) </pre>  </li>
+		<li> Obtain the hostname of the processor</li>
+	</ul></li>
+
+	</ul>
+    </article>
+  </slide>
+	
+  <slide>
+    <hgroup>
+      <h2>Hello World Example</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="C" >
+      #include "mpi.h"
+      #include &lt;stdio.h&gt;
+      int main(int argc, char *argv[]){
+	int rank, nprocs, len;
+	char name[MPI_MAX_PROCESSOR_NAME];
+
+	MPI_Init(&argc,&argv);
+	MPI_Comm_size(MPI_COMM_WORLD,&nprocs);
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	MPI_Get_processor_name(name, &len);
+	printf("Hello, world.  I am %d of %d on %s\n", rank, nprocs, name);
+	fflush(stdout);
+	MPI_Finalize();
+	return 0;
+      } 
+      </pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Message Envelope</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li> To send a message we need and envelope</li>
+	<li> In MPI, envelopes are:
+	 <ul>
+	  <li> The datatype of the message </li>
+	  <li> The size of the message (count) </li>
+	  <li> The destination/source of the message</li>
+	  <li> A tag to classify the message</li>
+	 <ul>
+	</li>
+      </ul>
+      <div class="centered" style="margin-top:2em">
+        <img src="images/MPI01/envelope.jpg" alt="Envelope" title="Envelope" style="width:30%">
+      </div>
+    </article>
+  </slide>
+
+  <slide>
+    <aside class="note">
+     <section>
+       <ul>
+          <li>MPI_PACKED to pack data from diferent variables of different types MPI_BYTE too</li>
+       </ul>
+      </section>
+    </aside>
+    <hgroup>
+      <h2>Message Envelope</h2>
+    </hgroup>
+    <article>
+      <p> MPI datatypes are not the same as C types, however MPI has some predefined types corresponding to them </p>
+      <div  class="columns-2">
+        <table >
+	 <thead>
+	  <tr> <th> MPI DataType </th> <th> C DataType </th> </tr> 
+ 	 </thead>
+	 <tbody>
+	  <tr> <td> MPI_CHAR   	</td> <td> signed char 		</td></tr>
+	  <tr> <td> MPI_SHORT  	</td> <td> signed short int 	</td></tr>
+	  <tr> <td> MPI_INT    	</td> <td> signed int 		</td> </tr>
+	  <tr> <td> MPI_LONG   	</td> <td> signed long int	</td> </tr>
+	  <tr> <td> MPI_UNSIGNED_CHAR	</td> <td> unsigned char 	</td> </tr>
+	  <tr> <td> MPI_UNSIGNED_SHORT	</td> <td> unsigned short int 	</td> </tr>
+	  <tr> <td> MPI_UNSIGNED 	</td> <td> unsigned int 	</td> </tr>
+	 </tbody>
+	</table>
+	<table>
+	 <thead>
+	  <tr> <th> MPI DataType </th> <th> C DataType </th> </tr> 
+ 	 </thead>
+	 <tbody>
+	  <tr> <td> MPI_UNSIGNED_LONG	</td> <td> unsigned long int 	</td> </tr>
+	  <tr> <td> MPI_FLOAT 		</td> <td> float 		</td> </tr>
+ 	  <tr> <td> MPI_DOUBLE		</td> <td> double 		</td> </tr>
+	  <tr> <td> MPI_LONG_DOUBLE	</td> <td> long double 		</td> </tr>
+	  <tr> <td> MPI_BYTE		</td> <td> 			</td> </tr>
+	  <tr> <td> MPI_PACKED		</td> <td> 			</td> </tr>
+	 </tbody> 
+	</table>
+       </div>    
+</article>
+  </slide>
+
+
+  <slide>
+    <aside class="note">
+     <section>
+       <ul>
+          <li>MPI_PACKED to pack data from diferent variables of different types MPI_BYTE too</li>
+       </ul>
+      </section>
+    </aside>
+    <hgroup>
+      <h2>Basic Communication Operations</h2>
+    </hgroup>
+    <article>
+      <ul class="build">
+	<li><ul>
+	   <li><pre class="prettyprint" data-lang="C">int MPI_Send(void* message, int count, MPI_Datatype datatype, 
+int dest, int tag, MPI_Comm comm)</pre></li>
+	   <li>Sends a message to a designated process <b>dest</b></li>
+	 </ul></li>
+	<li><ul>
+	   <li><pre class="prettyprint" data-lang="C">int MPI_Recv(void* message, int count, MPI_Datatype datatype, int source,
+ int tag, MPI_Comm comm, MPI_Status* status)</pre></li>
+	   <li>Receives a message from the process <b>source</b></li>
+	   <li> the parameters must match the send ones</li>
+	   <li><b>MPI_ANY_SOURCE</b> allows to recieve data from any source</li>
+	   <li><b>MPI_ANY_TAG</b> allows to recieve messages with any tag</li>
+	</ul></li>
+	</ul>
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>MPI_Status struct</h2>
+    </hgroup>
+    <article>
+      <p>MPI_Status is an struct that contains the following fields:</p>
+      <ul>
+	<li> <b>MPI_SOURCE</b> The id of the sender. Usefull when MPI_ANY_SOURCE used</b>
+	<li> <b>MPI_TAG</b> The tag of the message. Usefull when MPI_ANY_TAG used</b>
+	<li> <b>MPI_ERROR</b> Any error returned for the call
+    </article>
+  </slide>
+	
+
+   <slide>
+    <hgroup>
+      <h2>Message Passing Hello World</h2>
+    </hgroup>
+    <article>
+      <ul style="list-style-type: none;">
+	<li> Each process but the 0 send a message to process 0 :</li>
+	<li><font color="blue">"Hello, world. I'am &lt;rank&gt; of &lt;numproc&gt; on &lt;name&gt;" </font> </li>
+	<li> The proces 0 will print the same message for itself and for all messages recieved:</li>
+	<li> <font color="blue"> "Recieved from &lt;source&gt; : &lt;message recieved&gt;</font> </li>
+	</ul>
+	<a target="_self" href="Message_Hello.html">
+		Solution</a>
+    </article>
+  </slide>
+
+<!-- Empty Slide 
+  <slide>
+    <hgroup>
+      <h2>Title</h2>
+    </hgroup>
+    <article>
+      code
+    </article>
+  </slide>
+ -->
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/udl.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;That's all!&gt;</h2>
+      <p class="auto-fadein"><a href="mailto:eloigabal@diei.udl.cat" style="color: white;">eloigabal@diei.udl.cat</a></p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-65757-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>
