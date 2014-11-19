@@ -1,0 +1,274 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!--
+  Slides for the first laboratory session of the Operating Systems course
+  University of Lleida | 2014-2015
+
+  Author: Jordi Vilaplana <gatasuna@gmail.com>
+
+  URL:
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <span><img src="images/eps.png"></span>
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/udl.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+    </hgroup>
+    <article class="smaller">
+      <h2>Session 2</h2>
+      <h3>Packaging Data</h3>
+      <div class="centered">
+        <p><a target="_self" href="01_intro_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="02_group_MPI.html">Next session</a></p>
+        <p>&nbsp;</p>
+        <img src="images/MPI01/cluster.jpg" title="schema" alt="Schema" style="width:50%" />
+      </div>
+      <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
+    </article>
+  </slide>
+
+<slide>
+    <hgroup>
+      <h2>I/O of Parallel processors</h2>
+    </hgroup>
+    <article>
+	<p>The common flow to I/O the data to work for a parallel aplication follows like this:</p>
+      <ul>
+	<li> The process 0 collects the data and distributes it among the other processors</li>
+	<li> The output data can be treated in different ways:
+	 <ul>
+	   <li>Send the processed data back to process 0</li>
+	   <li>Store the partial data in files and collect them by the process 0 (care to not overload the process by reading tons of files</li>
+	   <li>Store the results in a db</li>
+	 </ul>
+	</li>
+       </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Group Data for Communication</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>Sending a message for data variable is an expensive operation</li>
+	<li>Improving the performance is possible by sending all the data with a single message</li>
+	<li>Depending on the problem we can:
+	 <ul>
+		<li> Use the <b>count</b> parameter to send data of the <b>same Datatype</b> </li>
+		<li> Use the <b>MPI_Pack</b> and <b>MPI_Unpack</b> functions to send data of <b>different Datatype</b></li>
+		<li> Create your <b>derived MPI Datatype</b> to send all the data</li>
+	 </ul>
+	</li>
+       </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Group Data for Communication</h2>
+    </hgroup>
+    <article>
+      <p> How to decide which method to use</p>
+      <ul>
+	<li>If data are the same type or in an array: <b>Use count</b></li>
+	<li>If data are different types but only sent a few times: <b>Use packing/unpacking</b></li>
+	<li>If data are different types and must be sent repeatedly: <b>Use derived Datatype</b></li>
+	
+      </ul>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>MPI_Pack </h2>
+    </hgroup>
+    <article>
+     	<p>MPI function to pack different data into a buffer</p>
+	<ul class="build">
+	  <li><ul>
+	 	<li><pre class="prettyprint" data-lang="c">int MPI_Pack(void *inbuf,int incount,MPI_Datatype datatype,void *outbuf,
+int outcount,int *position,MPI_Comm comm);
+		</pre></li>
+		<li> <b>inbuf</b> the variable to pack into the buffer <b>outbuf</b></li>
+		<li> <b>incount</b> The count of inbuf</li>
+		<li> <b>outbuf</b> The count of outbuf</b>
+		<li> <b>position</b>The current position in the outbuf. It is increased automatically</li>
+	</ul></li>
+	</ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>MPI_Unack </h2>
+    </hgroup>
+    <article>
+     	<p>MPI function to unpack the previous packed data</p>
+	<ul class="build">
+	  <li><ul>
+	 	<li><pre class="prettyprint" data-lang="c">int MPI_Unpack(void *inbuf, int insize, int *position, void *outbuf,
+int outcount,MPI_Datatype datatype,MPI_Comm comm);
+
+		</pre></li>
+		<li> <b>inbuf</b> The packed buffer</li>
+		<li> <b>outbuf</b> The variable to unpack</li>
+		<li> <b>incount</b> The count of inbuf</li>
+		<li> <b>outbuf</b> The count of outbuf</b>
+		<li> <b>position</b>The current position in the outbuf. It is increased automatically</li>
+	</ul></li>
+	</ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>MPI Derived Datatype</h2>
+    </hgroup>
+    <article>
+      <p>Define your personal Datatype to send messages with all the data.</p>
+	<ul>
+	 <li><pre class="prettyprint" data-lang="c">int MPI_Type_create_struct(int count, int array_of_blocklengths[],
+    const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[],
+    MPI_Datatype *newtype)</pre>
+	 <ul>
+	   <li><b>array_of_blocklengths[]</b> an array with the length of the different blocks of the struct</li>
+	   <li><b>array_of_displacements[]</b> an array of the relative displacements of each block inside the struct
+		<ul><li> Obtained with the function:</li>
+		    <li><pre class="prettyprint" data-lang="c">int MPI_Get_address(const void *location, MPI_Aint *address)</pre></li>
+		</ul>
+	   </li>
+	   <li><b>array_of_types[]</b> an array with the type of each block</li>
+	   <li><b>newtype</b> an MPI_Datatype variable, wich will contain the defined type</li>
+	 </ul
+	 </li>
+	</ul>
+    </article>
+  </slide>
+ 
+   <slide>
+    <hgroup>
+      <h2>MPI Derived Datatype</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>Before using a derived Datatype, it must be commited</li>
+	<li><pre class="prettyprint" data-lang="c">int MPI_Type_commit(MPI_Datatype *datatype)</pre></li>
+	<li>And after using it, it must be freed</li>
+	<li><pre class="prettyprint" data-lang="c">int MPI_Type_free(MPI_Datatype *datatype)</pre></li>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Grup Data Examples</h2>
+    </hgroup>
+    <article>
+	<ul>
+      	 <li><a target="_self" href="DistributingCount.html">Grouping Data with count</a></li>
+      	 <li><a target="_self" href="DistributingPack.html">Grouping Data with Pack</a></li>
+	 <li><a target="_self" href="DistributingStruct.html">Grouping Data with derived Datatype</a></li>
+	</ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Tournament Exercise</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>We have 4 teams of 5 players each</li>
+	<li>Players can have different skill depending on the champion selected</li>
+	<li>The game is won by the team wich has more accumulated skill of all its players</li>
+	<li>In the case of a draw, the first team wins</li>
+	<li><a target="_self" href="SerialTournament.html">Serial Code</a></li>
+	<li><a target="_self" href="ParallelTournament.html">Parallel Code</a></li>
+      </ul>
+    </article>
+  </slide>
+<!-- Empty Slide 
+  <slide>
+    <hgroup>
+      <h2>Title</h2>
+    </hgroup>
+    <article>
+      code
+    </article>
+  </slide>
+ -->
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/udl.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;That's all!&gt;</h2>
+      <p class="auto-fadein"><a href="mailto:eloigabal@diei.udl.cat" style="color: white;">eloigabal@diei.udl.cat</a></p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-65757-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Distributing Data with count</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="js/prettify/prettify.css">
+  <script type="text/javascript" src="js/prettify/prettify.js"></script>
+</head>
+<body onload="prettyPrint()">
+  <p><a href="02_collective_MPI.html#12"><-- return to slides</a></p>
+<pre class="prettyprint linenums" data-lang="c">
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+
+
+
+
+struct team {char name[10];int player1[5];int player2[5];int player3[5];int player4[5];int player5[5];};
+typedef struct team Team;
+
+Team playGames(Team team1,Team team2){
+	int skillTeam1=0;
+	int skillTeam2=0;
+	int r;
+	//each player of a team selects a champion and adds his skill to the team
+	//team 1	
+	r = rand() % 5;
+	skillTeam1+=team1.player1[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player2[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player3[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player4[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player5[r];
+	//team 2	
+	r = rand() % 5;
+	skillTeam2+=team2.player1[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player2[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player3[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player4[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player5[r];
+	
+	if(skillTeam1>skillTeam2){
+		return team1;
+	}else{
+		return team2;
+	}
+
+}
+int main(int argc, char **argv ){
+	int numTeams=4;
+	int numGames=6;
+	srand(time(NULL));//set the seed
+	//create the array of teams
+	Team teams[numTeams];
+	int games[6][2];	
+	
+	FILE *file=fopen("data.dat","r");
+
+	//read the data
+
+	// initialize the teams
+	int i;
+	for(i=0;i&li;numTeams;i++){
+		fscanf(file,"%s",teams[i].name);
+		fscanf(file,"%d %d %d %d %d",&teams[i].player1[0],&teams[i].player1[1],&teams[i].player1[2],&teams[i].player1[3],&teams[i].player1[4]);
+		fscanf(file,"%d %d %d %d %d",&teams[i].player2[0],&teams[i].player2[1],&teams[i].player2[2],&teams[i].player2[3],&teams[i].player2[4]);
+		fscanf(file,"%d %d %d %d %d",&teams[i].player3[0],&teams[i].player3[1],&teams[i].player3[2],&teams[i].player3[3],&teams[i].player3[4]);
+		fscanf(file,"%d %d %d %d %d",&teams[i].player4[0],&teams[i].player4[1],&teams[i].player4[2],&teams[i].player4[3],&teams[i].player4[4]);
+		fscanf(file,"%d %d %d %d %d",&teams[i].player5[0],&teams[i].player5[1],&teams[i].player5[2],&teams[i].player5[3],&teams[i].player5[4]);
+	}
+	// read and play the games
+	int team1;
+	int team2;
+	for(i=0;i&li;numGames;i++){
+		fscanf(file,"%d %d",&team1,&team2);
+		Team winer=playGames(teams[team1],teams[team2]);
+		printf("Winer of game %d is %s\n",i+1,winer.name);
+	}
+	
+
+	
+}
+</pre>
+</body>
+</html>
