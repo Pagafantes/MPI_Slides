@@ -9,7 +9,7 @@
   <script type="text/javascript" src="js/prettify/prettify.js"></script>
 </head>
 <body onload="prettyPrint()">
-  <p><a href="02_collective_MPI.html#12"><-- return to slides</a></p>
+  <p><a href="02_group_MPI.html#12"><-- return to slides</a></p>
 <pre class="prettyprint linenums" data-lang="c">
 #include <stdio.h>
 #include <time.h>
