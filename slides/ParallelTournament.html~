@@ -11,7 +11,7 @@
 <body onload="prettyPrint()">
   <p><a href="02_group_MPI.html#12"><-- return to slides</a></p>
 <pre class="prettyprint linenums" data-lang="c">
-#include &lt;stdio.h&gt;
+#include <stdio.h>
 #include "mpi.h"
 struct team {char name[10];int player1[5];int player2[5];int player3[5];int player4[5];int player5[5];};
 typedef struct team Team;
@@ -44,7 +44,7 @@ Team playGames(Team team1,Team team2){
 	r = rand() % 5;
 	skillTeam2+=team2.player5[r];
 	
-	if(skillTeam1&gt;skillTeam2){
+	if(skillTeam1>skillTeam2){
 		return team1;
 	}else{
 		return team2;
@@ -116,7 +116,7 @@ int main(int argc, char **argv ){
 
 		// initialize the teams
 		int i;
-		for(i=0;i&lt;numTeams;i++){
+		for(i=0;i<numTeams;i++){
 			int x=fscanf(file,"%s",teams[i].name);
 			x=fscanf(file,"%d %d %d %d %d",&teams[i].player1[0],&teams[i].player1[1],&teams[i].player1[2],&teams[i].player1[3],&teams[i].player1[4]);
 			x=fscanf(file,"%d %d %d %d %d",&teams[i].player2[0],&teams[i].player2[1],&teams[i].player2[2],&teams[i].player2[3],&teams[i].player2[4]);
@@ -127,7 +127,7 @@ int main(int argc, char **argv ){
 		// read the games and send the teams to other processors 
 		int team1;
 		int team2;
-		for(i=1;i&lt;nprocs;i++){
+		for(i=1;i<nprocs;i++){
 			int x=fscanf(file,"%d %d",&team1,&team2);
 			teamsPlaing[0]=teams[team1];
 			teamsPlaing[1]=teams[team2];
@@ -135,7 +135,7 @@ int main(int argc, char **argv ){
 		}
 		// recieve the results of the games and print them
 		Team winer;
-		for(i=1;i&lt;nprocs;i++){
+		for(i=1;i<nprocs;i++){
 			MPI_Status status;
 			MPI_Recv(&winer,1,MPI_Team,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&status);
 			printf("Winer of game %d is %s\n",status.MPI_SOURCE,winer.name);

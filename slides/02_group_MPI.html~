@@ -60,7 +60,7 @@ URL: https://code.google.com/p/io-2012-slides
       <div class="centered">
         <p><a target="_self" href="01_intro_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="02_group_MPI.html">Next session</a></p>
         <p>&nbsp;</p>
-        <img src="images/MPI01/cluster.jpg" title="schema" alt="Schema" style="width:50%" />
+        <img src="images/MPI02/packing.jpg" title="schema" alt="Schema" style="width:50%" />
       </div>
       <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
     </article>
@@ -219,11 +219,21 @@ int outcount,MPI_Datatype datatype,MPI_Comm comm);
     <article>
       <ul>
 	<li>We have 4 teams of 5 players each</li>
-	<li>Players can have different skill depending on the champion selected</li>
+	<li>The tournament will consist of 6 games</li>
+	<li>In each game, two teams compete to obtain victory</li>
+	<li>Players can have different skill depending on a champion selected randomly</li>
 	<li>The game is won by the team wich has more accumulated skill of all its players</li>
-	<li>In the case of a draw, the first team wins</li>
-	<li><a target="_self" href="SerialTournament.html">Serial Code</a></li>
-	<li><a target="_self" href="ParallelTournament.html">Parallel Code</a></li>
+	<li>In the case of a draw, the first team in the list wins</li>
+	<li>The Teams, Player skills, and games are read from the file <b>data.dat</b>
+		<ul>
+		<li>First line, the name of the team</li>
+		<li>Next, A line for player in this team: 5 integers for each player indicating his skills with a different champion</li>
+		<li>After the four teams, the information of the games follows in the file</li>
+		<li>For each game, a line with 2 integers indicates which teams play: 0,1,2 or 3</li>
+		</ul>
+	</li>
+	</ul>
+	<p>&nbsp;&nbsp;&nbsp;&nbsp;<a target="_self" href="SerialTournament.html">Serial Code</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a target="_self" href="ParallelTournament.html">Parallel Code</a></p>
       </ul>
     </article>
   </slide>
