@@ -138,12 +138,15 @@ URL: https://code.google.com/p/io-2012-slides
     <article>
       <ul>
 	<li>Make the parallel version of the program solving <code> f(X<sup>2</sup>) </code></li>
-	<li>Calculate it for interval <font color="blue">[0,1]</font> with <font color="blue"> n=10000</font>.</li>
-	<li>Execute the application at <code> moore.udl.net</code> with 2,4,6,8,10 processes, and compute the time for each execution</li>
-	<li>Draw a graph with the results</li>
+	<li>Experiment the application at <code> moore.udl.net</code></li>
+	<li>Calculate it for different intervals <font color="blue">[a,b]</font> and different <font color="blue">n</font>.</li>
+	<li> Calculate with 2,4,8,16,32 processes</li>
+	<li> Compute the time for each execution</li>
+	<li>Write an Report with the results</li>
       </ul>
     </article>
   </slide>
+
 <!-- Empty Slide 
   <slide>
     <hgroup>
