@@ -1,0 +1,192 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!--
+  Slides for the first laboratory session of the Operating Systems course
+  University of Lleida | 2014-2015
+
+  Author: Jordi Vilaplana <gatasuna@gmail.com>
+
+  URL:
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <span><img src="images/eps.png"></span>
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/udl.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+    </hgroup>
+    <article class="smaller">
+      <h2>Practical Exercise</h2>
+      <h3>Trapezoid Rule</h3>
+      <div class="centered">
+        <p><a target="_self" href="03_collective_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="04_trapezoid_MPI.html">Next session</a></p>
+        <p>&nbsp;</p>
+        <img src="images/MPI04/trapezoid.jpg" title="schema" alt="Schema" style="width:50%" />
+      </div>
+      <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Integral with the trapezoid rule</h2>
+    </hgroup>
+    <article>
+      <p>The trapezoid rule estimates the definite integral from the interval <font color="blue">[a,b]</font> dividng it into <font color="blue">n</font> parts</b>
+      <div class="centered"><img src="images/MPI04/IntegralT.jpg" title="Integral" alt="integral" style="width:70%"/></div>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Integral with the trapezoid rule</h2>
+    </hgroup>
+    <article>
+      <p>The area of the trapezoid is the addition of the areas of the rectangle and triangle that compose it</p>
+      <div class="columns-2 centered">
+	<p>Area of rectangle</p>
+	<p>Area of triangle</p>
+      </div>
+      <div class="columns-2 centered">
+	<img src="images/MPI04/rectangle.jpg" style="width:30%"/><p/>
+	<img src="images/MPI04/triangle.jpg" style="width:40%"/>
+      </div>
+      <div class="centered">
+	<img src="images/MPI04/area1.jpg"/>
+      </div>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Integral with the trapezoid rule</h2>
+    </hgroup>
+    <article>
+      <div class="centered">
+	<img src="images/MPI04/area2.jpg" style="width:60%"/><p/>
+	<img src="images/MPI04/area3.jpg" style="width:60%"/>
+      </div>
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>Integral of the trapezoid rule</h2>
+    </hgroup>
+    <article>
+      <p> Calculate the definite integral of<code> f(X<sup>2</sup>) </code>using the trapezoid rule</p>
+      <div class="centered">
+	<h3><a target="_self" href="SerialTrapezoid.html">Serial Code</a></h3>
+      </div>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Integral of the trapezoid rule</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>Split the interval <font color="blue">[a,b]</font> among the processes</li>
+	<li>Each process estimates the integral over its subinterval</li>
+	<li>The total integral is the addition of the local calculations</li>
+      </ul>
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>Activity</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>Make the parallel version of the program solving <code> f(X<sup>2</sup>) </code></li>
+	<li>Calculate it for interval <font color="blue">[0,1]</font> with <font color="blue"> n=10000</font>.</li>
+	<li>Execute the application at <code> moore.udl.net</code> with 2,4,6,8,10 processes, and compute the time for each execution</li>
+	<li>Draw a graph with the results</li>
+      </ul>
+    </article>
+  </slide>
+
+<!-- Empty Slide 
+  <slide>
+    <hgroup>
+      <h2>Title</h2>
+    </hgroup>
+    <article>
+      code
+    </article>
+  </slide>
+ -->
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/udl.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;That's all!&gt;</h2>
+      <p class="auto-fadein"><a href="mailto:eloigabal@diei.udl.cat" style="color: white;">eloigabal@diei.udl.cat</a></p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-65757-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

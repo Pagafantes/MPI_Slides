@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Distributing Data with count</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="js/prettify/prettify.css">
+  <script type="text/javascript" src="js/prettify/prettify.js"></script>
+</head>
+<body onload="prettyPrint()">
+  <p><a href="03_collective_MPI.html#9"><-- return to slides</a></p>
+<pre class="prettyprint linenums" data-lang="c">
+#include &lt;stdio.h&gt;
+#include "mpi.h"
+
+struct team {char name[10];int player1[5];int player2[5];int player3[5];int player4[5];int player5[5];};
+typedef struct team Team;
+
+Team playGames(Team team1,Team team2){
+	int skillTeam1=0;
+	int skillTeam2=0;
+	int r;
+	//each player of a team selects a champion and adds his skill to the team
+	//team 1	
+	r = rand() % 5;
+	skillTeam1+=team1.player1[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player2[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player3[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player4[r];
+	r = rand() % 5;
+	skillTeam1+=team1.player5[r];
+	//team 2	
+	r = rand() % 5;
+	skillTeam2+=team2.player1[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player2[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player3[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player4[r];
+	r = rand() % 5;
+	skillTeam2+=team2.player5[r];
+	
+	if(skillTeam1&gt;skillTeam2){
+		return team1;
+	}else{
+		return team2;
+	}
+
+}
+
+int main(int argc, char **argv ){
+	int rank,nprocs;
+	MPI_Datatype MPI_Team;
+	int blocks[6];
+	MPI_Aint indices[6];
+	MPI_Datatype MPItypes[6];
+	
+	MPI_Init( &argc, &argv );
+
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+	MPI_Comm_size( MPI_COMM_WORLD, &nprocs);
+	//create the array of teams
+	int numTeams=4;
+	Team teams[numTeams];
+	/* One value of each type */
+	blocks[0] = 10;
+	blocks[1] = 5;
+	blocks[2] = 5;
+	blocks[3] = 5;
+	blocks[4] = 5;
+	blocks[5] = 5;
+	
+	/* The base types */
+	MPItypes[0] = MPI_CHAR;
+	MPItypes[1] = MPI_INT;
+	MPItypes[2] = MPI_INT;
+	MPItypes[3] = MPI_INT;
+	MPItypes[4] = MPI_INT;
+	MPItypes[5] = MPI_INT;
+	
+	/* The locations of each element */
+	MPI_Get_address( &teams[0].name, &indices[0] );
+	MPI_Get_address( &teams[0].player1, &indices[1] );
+	MPI_Get_address( &teams[0].player2, &indices[2] );
+	MPI_Get_address( &teams[0].player3, &indices[3] );
+	MPI_Get_address( &teams[0].player4, &indices[4] );
+	MPI_Get_address( &teams[0].player5, &indices[5] );
+	/* Make relative */
+	MPI_Aint baseaddr=indices[0];
+	indices[0] = indices[0]-baseaddr;
+	indices[1] = indices[1]-baseaddr;
+	indices[2] = indices[2]-baseaddr;
+	indices[3] = indices[3]-baseaddr;
+	indices[4] = indices[4]-baseaddr;
+	indices[5] = indices[5]-baseaddr;
+	
+	
+	MPI_Type_create_struct( 6, blocks, indices, MPItypes, &MPI_Team );
+	MPI_Type_commit( &MPI_Team);
+	
+	
+	srand(time(NULL));//set the seed
+	
+	int numGames=6;
+	
+	//The array to send to all processors
+	Team teamsToGames[numGames*2];
+	//The teams wich are playing togeter;
+	Team teamsPlaing[2];
+	//the winers of each game
+	Team winnerTeams[numGames];
+	
+	if (rank == 0){
+      		FILE *file=fopen("data.dat","r");
+
+		//read the data
+
+		// initialize the teams
+		int i;
+		for(i=0;i&lt;numTeams;i++){
+			int x=fscanf(file,"%s",teams[i].name);
+			x=fscanf(file,"%d %d %d %d %d",&teams[i].player1[0],&teams[i].player1[1],&teams[i].player1[2],&teams[i].player1[3],&teams[i].player1[4]);
+			x=fscanf(file,"%d %d %d %d %d",&teams[i].player2[0],&teams[i].player2[1],&teams[i].player2[2],&teams[i].player2[3],&teams[i].player2[4]);
+			x=fscanf(file,"%d %d %d %d %d",&teams[i].player3[0],&teams[i].player3[1],&teams[i].player3[2],&teams[i].player3[3],&teams[i].player3[4]);
+			x=fscanf(file,"%d %d %d %d %d",&teams[i].player4[0],&teams[i].player4[1],&teams[i].player4[2],&teams[i].player4[3],&teams[i].player4[4]);
+			x=fscanf(file,"%d %d %d %d %d",&teams[i].player5[0],&teams[i].player5[1],&teams[i].player5[2],&teams[i].player5[3],&teams[i].player5[4]);
+		}
+		// read the games and send the teams to other processors 
+		int team1,team2;
+		for(i=0;i&lt;numGames*2;i+=2){
+			int x=fscanf(file,"%d %d",&team1,&team2);
+			teamsToGames[i]=teams[team1];
+			teamsToGames[i+1]=teams[team2];
+		}
+		fclose(file);
+	}
+
+	//all processors do the Scatter, even 0 will recieve data
+	MPI_Scatter((void*)teamsToGames,2,MPI_Team,(void*)teamsPlaing,2,MPI_Team,0,MPI_COMM_WORLD);
+	Team winer=playGames(teamsPlaing[0],teamsPlaing[1]);
+	MPI_Gather(&winer,1,MPI_Team,winnerTeams,1,MPI_Team,0,MPI_COMM_WORLD);
+	
+	if(rank==0){
+		int i;
+		for(i=0;i&lt;numGames;i++){
+			printf("The winner of game %d is %s\n",i,winnerTeams[i].name);
+		}
+	}
+	MPI_Type_free(&MPI_Team);
+	MPI_Finalize();
+}
+
+</pre>
+</body>
+</html>

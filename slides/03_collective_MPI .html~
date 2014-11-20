@@ -7,7 +7,7 @@ Authors: Eric Bidelman <ebidel@gmail.com>
 URL: https://code.google.com/p/io-2012-slides
 -->
 <!--
-  Index slides for the laboratory sessions of the Operating Systems course
+  Slides for the first laboratory session of the Operating Systems course
   University of Lleida | 2014-2015
 
   Author: Jordi Vilaplana <gatasuna@gmail.com>
@@ -53,18 +53,52 @@ URL: https://code.google.com/p/io-2012-slides
 
   <slide>
     <hgroup>
-      <h2>Contents</h2>
+    </hgroup>
+    <article class="smaller">
+      <h2>Session 3</h2>
+      <h3>Collective Communications</h3>
+      <div class="centered">
+        <p><a target="_self" href="02_group_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="03_collective_MPI.html">Next session</a></p>
+        <p>&nbsp;</p>
+        <img src="images/MPI02/packing.jpg" title="schema" alt="Schema" style="width:50%" />
+      </div>
+      <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Collective Communications</h2>
     </hgroup>
     <article>
-      <ul>
-        <li><a target="_self" href="01_intro_MPI.html">Session 1 - MPI introduction</a></li>
-	<li><a target="_self" href="02_group_MPI.html">Session 2 - Packaging Data</a></li>
-	<li><a target="_self" href="03_collective_MPI.html">Session 3 -Collective Communication</a></li>
-      </ul>
+      code
     </article>
   </slide>
 
+<!-- Empty Slide 
+  <slide>
+    <hgroup>
+      <h2>Title</h2>
+    </hgroup>
+    <article>
+      code
+    </article>
+  </slide>
+ -->
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/udl.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;That's all!&gt;</h2>
+      <p class="auto-fadein"><a href="mailto:eloigabal@diei.udl.cat" style="color: white;">eloigabal@diei.udl.cat</a></p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+    </p>
+  </slide>
+
   <slide class="backdrop"></slide>
+
 
 </slides>
 
