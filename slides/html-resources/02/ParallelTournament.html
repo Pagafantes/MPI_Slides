@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Distributing Data with count</title>
+  <title>Parallel Tournament</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" media="all" href="js/prettify/prettify.css">
-  <script type="text/javascript" src="js/prettify/prettify.js"></script>
+  <link rel="stylesheet" media="all" href="../../js/prettify/prettify.css">
+  <script type="text/javascript" src="../../js/prettify/prettify.js"></script>
 </head>
 <body onload="prettyPrint()">
-  <p><a href="03_collective_MPI.html#9"><-- return to slides</a></p>
+  <p><a href="../../02_group_MPI.html#12"><-- return to slides</a></p>
 <pre class="prettyprint linenums" data-lang="c">
 #include &lt;stdio.h&gt;
 #include "mpi.h"
-
 struct team {char name[10];int player1[5];int player2[5];int player3[5];int player4[5];int player5[5];};
 typedef struct team Team;
 
@@ -64,9 +63,13 @@ int main(int argc, char **argv ){
 
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
 	MPI_Comm_size( MPI_COMM_WORLD, &nprocs);
-	//create the array of teams
+	
+	srand(time(NULL));//set the seed
 	int numTeams=4;
+	int numGames=6;
+	//create the array of teams
 	Team teams[numTeams];
+
 	/* One value of each type */
 	blocks[0] = 10;
 	blocks[1] = 5;
@@ -102,18 +105,9 @@ int main(int argc, char **argv ){
 	
 	MPI_Type_create_struct( 6, blocks, indices, MPItypes, &MPI_Team );
 	MPI_Type_commit( &MPI_Team);
-	
-	
-	srand(time(NULL));//set the seed
-	
-	int numGames=6;
-	
-	//The array to send to all processors
-	Team teamsToGames[numGames*2];
-	//The teams wich are playing togeter;
+
+	//Te teams wich are playing togeter;
 	Team teamsPlaing[2];
-	//the winers of each game
-	Team winnerTeams[numGames];
 	
 	if (rank == 0){
       		FILE *file=fopen("data.dat","r");
@@ -131,30 +125,31 @@ int main(int argc, char **argv ){
 			x=fscanf(file,"%d %d %d %d %d",&teams[i].player5[0],&teams[i].player5[1],&teams[i].player5[2],&teams[i].player5[3],&teams[i].player5[4]);
 		}
 		// read the games and send the teams to other processors 
-		int team1,team2;
-		for(i=0;i&lt;numGames*2;i+=2){
+		int team1;
+		int team2;
+		for(i=1;i&lt;nprocs;i++){
 			int x=fscanf(file,"%d %d",&team1,&team2);
-			teamsToGames[i]=teams[team1];
-			teamsToGames[i+1]=teams[team2];
+			teamsPlaing[0]=teams[team1];
+			teamsPlaing[1]=teams[team2];
+			MPI_Send(&teamsPlaing, 2, MPI_Team,i, 0, MPI_COMM_WORLD );
 		}
-		fclose(file);
-	}
-
-	//all processors do the Scatter, even 0 will recieve data
-	MPI_Scatter((void*)teamsToGames,2,MPI_Team,(void*)teamsPlaing,2,MPI_Team,0,MPI_COMM_WORLD);
-	Team winer=playGames(teamsPlaing[0],teamsPlaing[1]);
-	MPI_Gather(&winer,1,MPI_Team,winnerTeams,1,MPI_Team,0,MPI_COMM_WORLD);
-	
-	if(rank==0){
-		int i;
-		for(i=0;i&lt;numGames;i++){
-			printf("The winner of game %d is %s\n",i,winnerTeams[i].name);
+		// recieve the results of the games and print them
+		Team winer;
+		for(i=1;i&lt;nprocs;i++){
+			MPI_Status status;
+			MPI_Recv(&winer,1,MPI_Team,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&status);
+			printf("Winer of game %d is %s\n",status.MPI_SOURCE,winer.name);
 		}
+	}else{
+		// recieve the teams and make them play
+		MPI_Status status;
+		MPI_Recv(&teamsPlaing,2,MPI_Team,0,MPI_ANY_TAG,MPI_COMM_WORLD,&status);
+		Team winer=playGames(teamsPlaing[0],teamsPlaing[1]);
+		MPI_Send(&winer,1,MPI_Team,0,0,MPI_COMM_WORLD);
 	}
 	MPI_Type_free(&MPI_Team);
 	MPI_Finalize();
 }
-
 </pre>
 </body>
 </html>

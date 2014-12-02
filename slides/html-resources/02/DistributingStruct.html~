@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" media="all" href="js/prettify/prettify.css">
-  <script type="text/javascript" src="js/prettify/prettify.js"></script>
+  <link rel="stylesheet" media="all" href="../../js/prettify/prettify.css">
+  <script type="text/javascript" src="../../js/prettify/prettify.js"></script>
 </head>
 <body onload="prettyPrint()">
-  <p><a href="02_group_MPI.html#11"><-- return to slides</a></p>
+  <p><a href="../../02_group_MPI.html#11"><-- return to slides</a></p>
 <pre class="prettyprint linenums" data-lang="c">
 #include &lt;stdio.h&gt;
 #include "mpi.h"

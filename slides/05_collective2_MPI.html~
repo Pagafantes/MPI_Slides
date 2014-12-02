@@ -1,0 +1,240 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!--
+  Slides for the first laboratory session of the Operating Systems course
+  University of Lleida | 2014-2015
+
+  Author: Jordi Vilaplana <gatasuna@gmail.com>
+
+  URL:
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <span><img src="images/eps.png"></span>
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/udl.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+    </hgroup>
+    <article class="smaller">
+      <h2>Session 5</h2>
+      <h3>Collective Communications II</h3>
+      <div class="centered">
+        <p><a target="_self" href="04_trapezoid_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="05_collective2_MPI.html">Next session</a></p>
+        <p>&nbsp;</p>
+        <img src="images/MPI05/collectives2.png" title="schema" alt="Schema" style="width:50%" />
+      </div>
+      <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
+    </article>
+  </slide>
+
+   <slide>
+    <hgroup>
+      <h2>Broadcast</h2>
+    </hgroup>
+    <article>
+      <p> Send a message from the root to all processes in the group, including the root.</p>
+	<p><pre class="prettyprint" data-lang="c">int MPI_Bcast(void* buffer, int count, MPI_Datatype datatype,
+int root, MPI_Comm comm)</pre></p>
+	<p> Write a program to send an array to all the processors</p>
+	<ul><li> process with rank 3 initializes a vector</li>
+	    <li> all processors recieve the vector and obtain print their vector to the screen</li>
+	</ul>
+	<p class="centered"> <a target="_self" href="html-resources/05/broadcast.html"> Solution </a></p>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Barrier Synchronization</h2>
+    </hgroup>
+    <article>
+	<p> Blocks the processors until all group members have called the routine.</p>
+      	<p><pre class="prettyprint" data-lang="c">MPI_Barrier(MPI_comm comm)</pre></p>
+	<p> Can be used to ensure that the acces to a resource is done by only one process</p>
+	<p> Improve the previous problem</p>	
+	<ul><li> To obtain the outputs of each processor ordered</li>
+	    <li> Only one process can use the standard output at the same time</li>
+	</ul>
+	<p class="centered"> <a target="_self" href="html-resources/05/barrier.html"> Solution </a></p>
+	
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>MPI_Allgather</h2>
+    </hgroup>
+    <article>
+      <p> Similar to Gather, but this time all processors recieve all the results</p>
+      <p><pre class="prettyprint" data-lang="c">int MPI_Allgather(void* sbuf, int scount, MPI_Datatype stype, void*
+rbuf, int rcount, MPI_Datatype rtype, MPI_Comm comm)</pre></p>
+	<ul><li> Same parameters as MPI_Gather but without the <b>root</b></li></ul>
+      <p> Write a program similar to the <a target="_self" href="html-resources/05/GatherScatter.html">scatter-gatter</a> using Allgather</p>
+      <p class="centered"> <a target="_self" href="html-resources/05/allgather.html"> Solution </a></p>
+      <p> Observe the differences with the outputs</p>
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>MPI_Alltoall</h2>
+    </hgroup>
+    <article>
+      <p> Each process sends different data to each reciever</p>
+      <p><pre class="prettyprint" data-lang="c">int MPI_Alltoall(void* sbuf, int scount, MPI_Datatype stype, void*
+rbuf, int rcount, MPI_Datatype rtype, MPI_Comm comm)</pre></p>
+      <ul><li>Process i, sends its j-th bloc to process j<li>
+	  <li>Process j, stores data from process i in its i-th block<li>
+      </ul>
+      <p> Write a program to transpose a 4x4 matrix using Alltoall</p>
+	<ul><li> The matrix is distributed among processors: a row for processor</li>
+	    <li> Each processor initialitzates its row: <code> (1+column)+(rank*size)</code></li>
+	    <li> Alltoall makes the rest </li>
+	</ul>
+      <p class="centered"> <a target="_self" href="html-resources/05/alltoall.html"> Solution </a></p>
+    </article>
+  </slide>
+
+   <slide>
+    <hgroup>
+      <h2>MPI_Reduce</h2>
+    </hgroup>
+    <article>
+      <p> Communication routine that includes a computation</p>
+      <p><pre class="prettyprint" data-lang="c">int MPI_Reduce(void* sbuf, void* rbuf, int count, MPI_Datatype
+stype, MPI_Op op, int root, MPI_Comm comm)</pre></p>
+      <p> Combines the operand in <b>sbuf</b> block by block using <b>op</b> and stores the result in </b>rbuf</b> on process root.</p>
+      <div class="columns-2">
+	<p>&nbsp;<table>
+			<tr><th>Name</th><th>Meaning</th></th>
+			<tr><td>MPI_MAX</td><td>maximum value</td></tr>
+			<tr><td>MPI_MIN</td><td>minimum value</td></tr>
+			<tr><td>MPI_MAX</td><td>sum</td></tr>
+			
+			</tb>
+      		</table>
+	</p>
+	<p>&nbsp;<table>
+			<tr><th>Name</th><th>Meaning</th></th>
+ 			<tr><td>MPI_MAX</td><td>max value and location</td></tr>
+			<tr><td>MPI_MAX</td><td>min value and location</td></tr>
+			<tr><td>MPI_MAX</td><td>product</td></tr>
+			</tb>
+      		</table>
+	</p>
+       </div>
+    </article>
+  </slide>
+
+   <slide>
+    <hgroup>
+      <h2>Create a program using MPI_Reduce</h2>
+    </hgroup>
+    <article>
+      <ul>
+      <li> Each processor generates a set of random numbers</li>
+      <li> Use MPI_Reduce with MPI_Sum to obtain the sum of all processors values</li>
+      <li> The reciving processor must add all the recieved values </li>
+      <li> Return the sum of all values of the processors</li>
+      </ul>
+      <p class="centered"><a target="_self" href="html-resources/05/reduce.html">Solution</a></p>
+      
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Other Communication Routines</h2>
+    </hgroup>
+    <article>
+      <ul>
+	<li>Global communications with variable data sizes</li>
+	<li>Non-Bloking communications</li>
+	<li>Variants of Reduce</li>
+	<li><h2>To obtain information of all the routines look at the MPI API</h2></li>
+     </ul>
+    </article>
+  </slide>
+<!-- Empty Slide 
+  <slide>
+    <hgroup>
+      <h2>Title</h2>
+    </hgroup>
+    <article>
+      code
+    </article>
+  </slide>
+ -->
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/udl.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;That's all!&gt;</h2>
+      <p class="auto-fadein"><a href="mailto:eloigabal@diei.udl.cat" style="color: white;">eloigabal@diei.udl.cat</a></p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-65757-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

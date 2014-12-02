@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Serial Trapezoid</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="../../js/prettify/prettify.css">
+  <script type="text/javascript" src="../../js/prettify/prettify.js"></script>
+</head>
+<body onload="prettyPrint()">
+  <p><a href="../../04_trapezoid_MPI.html#7"><-- return to slides</a></p>
+<pre class="prettyprint linenums" data-lang="c">
+#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+#include "math.h"
+
+double  f(double  x){
+	double  exponent=sin(2*x)*4;
+	double  num=pow(x,x);
+	double  num1 =5*x;
+	num+=num1;
+	num=pow(num,exponent);
+	double exponent1=pow(x,x);
+	exponent1=log(exponent1);
+	double den=pow(x,2);
+	double den2=pow(M_PI,x);
+	den+=den;
+	den=pow(den,exponent1);
+	return num/den;
+}
+
+int main(int argc,char **argv){
+	clock_t startT = clock();
+	float a=0;
+	float b=10;
+	int n=1000;
+	float h=(b-a)/n;
+	float integral=(f(a)+f(b))/2.0;
+	float x=a;
+	int i;
+	for(i=1;i&lt;=n-1;i++){
+		x+=h;
+		integral += f(x);
+	}
+	integral *=h;
+	clock_t endT = clock();
+	printf("result:%f Time:%f\n",integral,(double)(endT-startT)/CLOCKS_PER_SEC);
+
+}
+</pre>
+</body>
+</html>

@@ -58,7 +58,7 @@ URL: https://code.google.com/p/io-2012-slides
       <h2>Session 1</h2>
       <h3>Introduction to MPI</h3>
       <div class="centered">
-        <p><a target="_self" href="01_intro_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="02_collective_MPI.html">Next session</a></p>
+        <p><a target="_self" href="01_intro_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="02_group_MPI.html">Next session</a></p>
         <p>&nbsp;</p>
         <img src="images/MPI01/cluster.jpg" title="schema" alt="Schema" style="width:50%" />
       </div>

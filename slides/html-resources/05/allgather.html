@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Distributing Data with count</title>
+  <title>Allgather</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" media="all" href="js/prettify/prettify.css">
-  <script type="text/javascript" src="js/prettify/prettify.js"></script>
+  <link rel="stylesheet" media="all" href="../../js/prettify/prettify.css">
+  <script type="text/javascript" src="../../js/prettify/prettify.js"></script>
 </head>
 <body onload="prettyPrint()">
-  <p><a href="03_collective_MPI.html#8"><-- return to slides</a></p>
+  <p><a href="../../05_collective2_MPI.html#6"><-- return to slides</a></p>
 <pre class="prettyprint linenums" data-lang="c">
 #include &lt;stdio.h&gt;
 #include "mpi.h"
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
 	for(i=0;i&lt;size;i++){
 		data[i]=rank;
 	}
-	MPI_Gather((void*)data,size,MPI_FLOAT,vector,size,MPI_FLOAT,0,MPI_COMM_WORLD);
+	MPI_Allgather((void*)data,size,MPI_FLOAT,vector,size,MPI_FLOAT,MPI_COMM_WORLD);
 	char result2[500];
 	sprintf(result,"Process %d vector :",rank);
 	for(i=0;i&lt;10;i++){
