@@ -60,7 +60,7 @@ URL: https://code.google.com/p/io-2012-slides
       <div class="centered">
         <p><a target="_self" href="04_trapezoid_MPI.html">Previous session</a> - <a target="_self" href="index.html">Contents</a> - <a target="_self" href="05_collective2_MPI.html">Next session</a></p>
         <p>&nbsp;</p>
-        <img src="images/MPI05/collectives2.png" title="schema" alt="Schema" style="width:50%" />
+        <img src="images/MPI05/collectives2.jpg" title="schema" alt="Schema" style="width:50%" />
       </div>
       <footer class="source">image source: <a href="http://www.cdac.in/index.aspx?id=ev_hpc_hypack13_mode01_multicore_mpi_openmp">cdac.in</a></footer>
     </article>

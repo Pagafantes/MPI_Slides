@@ -147,16 +147,16 @@ stype, MPI_Op op, int root, MPI_Comm comm)</pre></p>
 			<tr><th>Name</th><th>Meaning</th></th>
 			<tr><td>MPI_MAX</td><td>maximum value</td></tr>
 			<tr><td>MPI_MIN</td><td>minimum value</td></tr>
-			<tr><td>MPI_MAX</td><td>sum</td></tr>
+			<tr><td>MPI_SUM</td><td>sum</td></tr>
 			
 			</tb>
       		</table>
 	</p>
 	<p>&nbsp;<table>
 			<tr><th>Name</th><th>Meaning</th></th>
- 			<tr><td>MPI_MAX</td><td>max value and location</td></tr>
-			<tr><td>MPI_MAX</td><td>min value and location</td></tr>
-			<tr><td>MPI_MAX</td><td>product</td></tr>
+ 			<tr><td>MPI_MAXLOC</td><td>max value and location</td></tr>
+			<tr><td>MPI_MINLOC</td><td>min value and location</td></tr>
+			<tr><td>MPI_PROD</td><td>product</td></tr>
 			</tb>
       		</table>
 	</p>
@@ -171,7 +171,7 @@ stype, MPI_Op op, int root, MPI_Comm comm)</pre></p>
     <article>
       <ul>
       <li> Each processor generates a set of random numbers</li>
-      <li> Use MPI_Reduce with MPI_Sum to obtain the sum of all processors values</li>
+      <li> Use MPI_Reduce with MPI_SUM to obtain the sum of all processors values</li>
       <li> The reciving processor must add all the recieved values </li>
       <li> Return the sum of all values of the processors</li>
       </ul>
